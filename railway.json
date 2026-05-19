@@ -1,6 +1,12 @@
 {
-    "$schema": "https://railway.app/railway.schema.json",
-    "build": {
-        "builder": "NIXPACKS"
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "env": {
+      "NIXPACKS_DOCUMENT_ROOT": "/public",
+      "DOCUMENT_ROOT": "public"
     }
+  }
 }
