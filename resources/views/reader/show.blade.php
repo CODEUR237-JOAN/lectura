@@ -191,6 +191,13 @@
                     </div>
                 </div>
 
+                @if($book->wishlists_count > 0)
+                    <div style="margin-top: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(244,164,74,0.1); border: 1px solid rgba(244,164,74,0.2); color: var(--accent); font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1rem;">🔥</span> 
+                        <span><strong>{{ $book->wishlists_count }}</strong> lecteur{{ $book->wishlists_count > 1 ? 's ont ajouté' : ' a ajouté' }} ce livre à leur liste d'envies.</span>
+                    </div>
+                @endif
+
                 <div class="review-stack">
                     @if (session('review_status'))
                         <div class="review-status">

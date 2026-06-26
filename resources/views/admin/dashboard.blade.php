@@ -35,6 +35,10 @@
         Ajouter un livre
         <span class="nav-count">+</span>
     </a>
+    <a class="nav-item" href="{{ route('admin.reviews.index', [], false) }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Avis lecteurs
+    </a>
     <a class="nav-item" href="{{ route('reader.index', [], false) }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Bibliothèque
@@ -92,7 +96,7 @@
     @if(!$insights['session_tracking_enabled'])
     <div class="notice" data-reveal>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div><strong>Suivi temps réel désactivé.</strong> Activez <code>SESSION_DRIVER=database</code> pour voir les connexions en direct (actuel : <code>{{ $insights['session_driver'] }}</code>).</div>
+        <div><strong>Le suivi en temps réel est désactivé.</strong> Veuillez configurer <code>SESSION_DRIVER=database</code> pour surveiller les connexions en direct (actuel : <code>{{ $insights['session_driver'] }}</code>).</div>
     </div>
     @endif
 
@@ -103,7 +107,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="stat-val">{{ $stats['total_users'] }}</div>
-            <div class="stat-label">Comptes totaux</div>
+            <div class="stat-label">Utilisateurs inscrits</div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon green">
@@ -145,7 +149,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             </div>
             <div class="stat-val">{{ $stats['total_books'] - $stats['published_books'] }}</div>
-            <div class="stat-label">Brouillons</div>
+            <div class="stat-label">Livres en brouillon</div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon blue">
@@ -168,8 +172,8 @@
         {{-- Métriques opérationnelles --}}
         <div class="card">
             <div class="card-head">
-                <h2>Vue opérationnelle</h2>
-                <p>Indicateurs de santé de la plateforme</p>
+                <h2>Indicateurs de performance</h2>
+                <p>Aperçu général de la santé et de l'utilisation de la plateforme</p>
             </div>
             <div class="card-body">
                 <div class="metric-list">
@@ -178,19 +182,19 @@
                         <div class="meter"><div class="meter-fill" style="width:{{ max(4,min(100,$insights['connected_rate'])) }}%"></div></div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-row"><span>Couverture catalogue publié</span><strong>{{ $insights['published_rate'] }}%</strong></div>
+                        <div class="metric-row"><span>Taux de publication du catalogue</span><strong>{{ $insights['published_rate'] }}%</strong></div>
                         <div class="meter"><div class="meter-fill" style="width:{{ max(4,min(100,$insights['published_rate'])) }}%"></div></div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-row"><span>Progression moyenne</span><strong>{{ number_format((float)$insights['average_reading_progress'],1) }}%</strong></div>
+                        <div class="metric-row"><span>Progression de lecture moyenne</span><strong>{{ number_format((float)$insights['average_reading_progress'],1) }}%</strong></div>
                         <div class="meter"><div class="meter-fill" style="width:{{ max(4,min(100,(int)round($insights['average_reading_progress']))) }}%"></div></div>
                     </div>
                 </div>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
                     <span class="badge badge-accent">{{ $insights['pending_books'] }} brouillon(s)</span>
                     <span class="badge badge-green">{{ $insights['recent_uploads'] }} ajout(s) / 30j</span>
-                    <span class="badge badge-default">{{ $insights['completed_books'] }} termités</span>
-                    <span class="badge badge-blue">{{ number_format((float)$insights['average_review_rating'],1) }}/5 note moy.</span>
+                    <span class="badge badge-default">{{ $insights['completed_books'] }} terminés</span>
+                    <span class="badge badge-blue">{{ number_format((float)$insights['average_review_rating'],1) }}/5 note moyenne</span>
                 </div>
             </div>
         </div>
@@ -198,8 +202,8 @@
         {{-- Top lecteurs --}}
         <div class="card">
             <div class="card-head">
-                <h2>Lecteurs engagés</h2>
-                <p>Classement par engagement</p>
+                <h2>Utilisateurs les plus engagés</h2>
+                <p>Classement basé sur l'activité récente</p>
             </div>
             <div class="card-body">
                 @forelse($topReaders as $tr)
@@ -219,7 +223,7 @@
                     </div>
                 </div>
                 @empty
-                <p style="color:var(--muted);font-size:.85rem;padding:8px 0">Aucun signal fort pour le moment.</p>
+                <p style="color:var(--muted);font-size:.85rem;padding:8px 0">Aucune donnée d'engagement significative pour le moment.</p>
                 @endforelse
             </div>
         </div>
@@ -227,8 +231,8 @@
         {{-- Formats catalogue --}}
         <div class="card">
             <div class="card-head">
-                <h2>Catalogue & formats</h2>
-                <p>Répartition par format de fichier</p>
+                <h2>Répartition du catalogue</h2>
+                <p>Statistiques des formats de fichiers publiés</p>
             </div>
             <div class="card-body">
                 @forelse($insights['formats'] as $format => $count)
@@ -239,7 +243,7 @@
                 @empty
                 <p style="color:var(--muted);font-size:.85rem">Aucun format détecté.</p>
                 @endforelse
-                <div style="margin-top:14px;font-size:.8rem;color:var(--muted)">{{ $insights['interaction_volume'] }} interactions totales</div>
+                <div style="margin-top:14px;font-size:.8rem;color:var(--muted)">{{ $insights['interaction_volume'] }} interactions enregistrées</div>
             </div>
         </div>
     </div>
@@ -252,8 +256,8 @@
             <div class="card-head" style="padding-bottom:14px">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
                     <div>
-                        <h2>Comptes utilisateurs</h2>
-                        <p>Gérez les rôles et sessions depuis cette vue</p>
+                        <h2>Gestion des utilisateurs</h2>
+                        <p>Gérez les rôles et les sessions actives de vos utilisateurs</p>
                     </div>
                     <span class="badge badge-blue">{{ $users->count() }} comptes</span>
                 </div>
@@ -267,7 +271,7 @@
                 <div class="list-item" data-name="{{ strtolower($user->name) }}" data-email="{{ strtolower($user->email) }}">
                     <div class="item-row">
                         <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
-                            <div class="avatar" style="background:rgba({{ $user->role==='admin' ? '244,164,74' : '126,184,245' }},.12);color:var(--{{ $user->role==='admin' ? 'accent' : 'blue' }})">
+                            <div class="avatar" style="background:rgba({{ $user->role==='admin' || $user->role==='super_admin' ? '244,164,74' : '126,184,245' }},.12);color:var(--{{ $user->role==='admin' || $user->role==='super_admin' ? 'accent' : 'blue' }})">
                                 {{ strtoupper(substr($user->name,0,2)) }}
                             </div>
                             <div style="min-width:0">
@@ -279,7 +283,7 @@
                             </div>
                         </div>
                         <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
-                            <span class="badge {{ $user->role==='admin' ? 'badge-accent' : 'badge-blue' }}">{{ $user->role === 'admin' ? 'Administrateur' : 'Lecteur' }}</span>
+                            <span class="badge {{ $user->role==='admin' || $user->role==='super_admin' ? 'badge-accent' : 'badge-blue' }}">{{ $user->role === 'super_admin' ? 'Admin Principal' : ($user->role === 'admin' ? 'Administrateur' : 'Lecteur') }}</span>
                             <span class="badge {{ $user->is_connected ? 'badge-green' : 'badge-default' }}">{{ $user->is_connected ? 'en ligne' : 'hors ligne' }}</span>
                         </div>
                     </div>
@@ -293,22 +297,26 @@
                         @if($user->ip_address)<span class="badge badge-default">{{ $user->ip_address }}</span>@endif
                     </div>
                     <div class="item-actions">
-                        <form method="POST" action="{{ route('admin.users.role', $user) }}">
-                            @csrf @method('PUT')
-                            <input type="hidden" name="role" value="{{ $user->role==='admin' ? 'reader' : 'admin' }}">
-                            <button class="btn btn-ghost btn-sm">{{ $user->role==='admin' ? 'Retirer admin' : 'Rendre admin' }}</button>
-                        </form>
-                        @if($user->is_connected)
-                        <form method="POST" action="{{ route('admin.users.disconnect', $user) }}">
-                            @csrf
-                            <button class="btn btn-ghost btn-sm">Déconnecter</button>
-                        </form>
-                        @endif
-                        @if($user->id !== $admin->id)
-                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Supprimer ce compte ?')">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+                        @if($admin->isSuperAdmin())
+                            <form method="POST" action="{{ route('admin.users.role', $user) }}">
+                                @csrf @method('PUT')
+                                <input type="hidden" name="role" value="{{ $user->role==='admin' ? 'reader' : 'admin' }}">
+                                <button class="btn btn-ghost btn-sm">{{ $user->role==='admin' || $user->role==='super_admin' ? 'Retirer admin' : 'Rendre admin' }}</button>
+                            </form>
+                            @if($user->is_connected)
+                            <form method="POST" action="{{ route('admin.users.disconnect', $user) }}">
+                                @csrf
+                                <button class="btn btn-ghost btn-sm">Déconnecter</button>
+                            </form>
+                            @endif
+                            @if($user->id !== $admin->id)
+                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Supprimer ce compte ?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                            @endif
+                        @else
+                            <span class="badge badge-default" style="opacity:0.6;font-size:0.7rem">Gestion réservée à l'admin principal</span>
                         @endif
                     </div>
                 </div>
@@ -322,8 +330,8 @@
             {{-- Lecteurs connectés --}}
             <div class="card">
                 <div class="card-head">
-                    <h2>Lecteurs connectés</h2>
-                    <p>Sessions actives récentes</p>
+                    <h2>Sessions actives</h2>
+                    <p>Lecteurs actuellement connectés</p>
                 </div>
                 <div class="card-body" id="connected-readers">
                     @forelse($connectedReaders as $cr)
@@ -353,7 +361,7 @@
             <div class="card">
                 <div class="card-head">
                     <h2>Activité récente</h2>
-                    <p>Dernières ouvertures de livres</p>
+                    <p>Dernières lectures enregistrées</p>
                 </div>
                 <div class="card-body">
                     <div class="timeline">
@@ -379,7 +387,7 @@
             <div class="card">
                 <div class="card-head">
                     <h2>Livres récents</h2>
-                    <p>Derniers ajouts au catalogue</p>
+                    <p>Dernières publications ajoutées au catalogue</p>
                 </div>
                 <div class="card-body">
                     @forelse($recentBooks as $book)

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\UserPreference;
 use App\Services\BookStorageService;
 use App\Services\RecommendationService;
+use App\Http\Requests\SaveReadingProgressRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -205,6 +206,7 @@ class ReaderController extends Controller
                 ->take(6),
         ])->loadCount([
             'reviews as visible_reviews_count' => fn ($query) => $query->where('is_visible', true),
+            'wishlists',
         ]);
 
         $userReview = auth()->check()
@@ -257,19 +259,13 @@ class ReaderController extends Controller
         return $response;
     }
 
-    public function saveProgress(Request $request, Book $book): JsonResponse
+    public function saveProgress(SaveReadingProgressRequest $request, Book $book): JsonResponse
     {
         abort_unless($book->is_published, 404);
 
         $reader = $this->resolveReaderUser();
 
-        $validated = $request->validate([
-            'current_page'     => ['nullable', 'integer', 'min:0'],
-            'current_location' => ['nullable', 'string', 'max:2048'],
-            'total_pages'      => ['nullable', 'integer', 'min:0'],
-            'progress_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'is_finished'      => ['nullable', 'boolean'],
-        ]);
+        $validated = $request->validated();
 
         $totalPages  = max((int) ($validated['total_pages'] ?? ($book->page_count ?? 0)), 0);
         $currentPage = max((int) ($validated['current_page'] ?? 0), 0);

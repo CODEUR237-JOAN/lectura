@@ -15,6 +15,7 @@ Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->isAdmin()
             ? redirect()->to(route('admin.dashboard', [], false))
+   
             : redirect()->to(route('reader.index', [], false));
     }
     return redirect()->to(route('login', [], false));
@@ -28,7 +29,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth.required')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/tableau-de-bord', DashboardController::class)->name('dashboard');
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/deconnexion', [AuthController::class, 'logout'])->name('logout');
@@ -49,13 +50,18 @@ Route::middleware('auth.required')->prefix('lecteur')->name('reader.')->group(fu
 });
 
 Route::middleware(['auth.required', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/livres/upload', [BookUploadController::class, 'create'])->name('books.create');
-    Route::post('/livres/upload', [BookUploadController::class, 'store'])->name('books.store');
+    Route::get('/tableau-de-bord', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::redirect('/livres/upload', '/admin/livres/ajouter');
+    Route::get('/livres/ajouter', [BookUploadController::class, 'create'])->name('books.create');
+    Route::post('/livres/ajouter', [BookUploadController::class, 'store'])->name('books.store');
     Route::get('/livres/{book}/modifier', [BookUploadController::class, 'edit'])->name('books.edit');
     Route::put('/livres/{book}', [BookUploadController::class, 'update'])->name('books.update');
     Route::delete('/livres/{book}', [BookUploadController::class, 'destroy'])->name('books.destroy');
     Route::put('/lecteurs/{user}/role', [AdminDashboardController::class, 'updateRole'])->name('users.role');
     Route::post('/lecteurs/{user}/deconnecter', [AdminDashboardController::class, 'disconnect'])->name('users.disconnect');
     Route::delete('/lecteurs/{user}', [AdminDashboardController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/avis', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::put('/avis/{review}/visibilite', [\App\Http\Controllers\Admin\AdminReviewController::class, 'updateVisibility'])->name('reviews.visibility');
+    Route::delete('/avis/{review}', [\App\Http\Controllers\Admin\AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 });

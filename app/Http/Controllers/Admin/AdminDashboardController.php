@@ -10,6 +10,7 @@ use App\Models\ReadingProgress;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\Wishlist;
+use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -77,7 +78,7 @@ class AdminDashboardController extends Controller
             ->latest()
             ->get()
             ->map(function (User $user) use ($connectedUsers, $sessionTrackingEnabled) {
-                $session = $connectedUsers->get($user->id);
+                $session = $connectedUsers->firstWhere('user_id', $user->id);
                 $engagementScore = ($user->completed_books_count * 5)
                     + ($user->active_progress_count * 3)
                     + ($user->reading_history_count * 2)
@@ -180,11 +181,11 @@ class AdminDashboardController extends Controller
         ]);
     }
 
-    public function updateRole(Request $request, User $user): RedirectResponse
+    public function updateRole(UpdateRoleRequest $request, User $user): RedirectResponse
     {
-        $validated = $request->validate([
-            'role' => ['required', 'string', Rule::in(['reader', 'admin'])],
-        ]);
+        abort_unless($request->user()->isSuperAdmin(), 403, 'Seul l\'administrateur principal peut effectuer cette action.');
+
+        $validated = $request->validated();
 
         if ((int) $request->user()->id === (int) $user->id && $validated['role'] !== 'admin') {
             return back()->with('warning', 'Vous ne pouvez pas retirer vos propres droits administrateur.');
@@ -203,6 +204,8 @@ class AdminDashboardController extends Controller
 
     public function disconnect(User $user): RedirectResponse
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403, 'Seul l\'administrateur principal peut effectuer cette action.');
+
         $deletedSessions = DB::table('sessions')
             ->where('user_id', $user->id)
             ->delete();
@@ -217,6 +220,8 @@ class AdminDashboardController extends Controller
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
+        abort_unless($request->user()->isSuperAdmin(), 403, 'Seul l\'administrateur principal peut effectuer cette action.');
+
         if ((int) $request->user()->id === (int) $user->id) {
             return back()->with('warning', 'Vous ne pouvez pas supprimer votre propre compte administrateur.');
         }

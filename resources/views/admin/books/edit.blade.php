@@ -293,7 +293,7 @@
             <div>
                 <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
                     <img src="{{ asset('images/branding/lectura-logo-3d.png') }}" alt="Lectura" style="width:60px;height:60px;border-radius:18px;object-fit:cover;border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 40px rgba(0,0,0,.24);">
-                    <span class="badge">admin edition</span>
+                    <span class="badge">édition admin</span>
                 </div>
                 <h1>Modifier {{ $book->title }}</h1>
                 <p>
@@ -303,9 +303,9 @@
                 <div class="hero-signature">Developed by Dongmo Joan</div>
             </div>
             <div class="actions">
-                <a class="button" href="{{ route('admin.dashboard') }}">Admin dashboard</a>
+                <a class="button" href="{{ route('admin.dashboard') }}">Tableau de bord</a>
                 <a class="button" href="{{ route('reader.show', $book) }}">Ouvrir le lecteur</a>
-                <a class="button" href="{{ route('admin.books.create') }}">Retour upload</a>
+                <a class="button" href="{{ route('admin.books.create') }}">Retour ajout</a>
             </div>
         </section>
 
@@ -357,11 +357,6 @@
                         <div class="field">
                             <label for="isbn">ISBN</label>
                             <input id="isbn" name="isbn" type="text" value="{{ old('isbn', $book->isbn) }}">
-                        </div>
-
-                        <div class="field">
-                            <label for="page_count">Nombre de pages</label>
-                            <input id="page_count" name="page_count" type="number" min="1" value="{{ old('page_count', $book->page_count) }}">
                         </div>
 
                         <div class="field">

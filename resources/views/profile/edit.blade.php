@@ -53,7 +53,7 @@
         </a>
         <a class="nav-item" href="{{ route('reader.index', ['filter' => 'wishlist'], false) }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            Ma liste d'envie
+            Ma liste d'envies
         </a>
         <a class="nav-item active" href="{{ route('profile.edit', [], false) }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -115,7 +115,7 @@
                 <div class="card" data-reveal>
                     <div class="card-body" style="padding: 32px">
                         <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px">Paramètres du compte</h2>
-                        <p style="color:var(--muted);font-size:.85rem;margin-bottom:24px">Mettez à jour vos informations personnelles et vos préférences de lecture.</p>
+                        <p style="color:var(--muted);font-size:.85rem;margin-bottom:24px">Gérez vos informations personnelles et configurez vos préférences de lecture.</p>
                         
                         <form method="POST" action="{{ route('profile.update') }}">
                             @csrf
@@ -127,26 +127,26 @@
                                     <input class="form-control" name="name" value="{{ old('name', $user->name) }}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Adresse Email</label>
+                                    <label>Adresse e-mail</label>
                                     <input class="form-control" type="email" name="email" value="{{ old('email', $user->email) }}" required>
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label>Biographie (optionnelle)</label>
-                                <textarea class="form-control" name="bio" rows="3" placeholder="Parlez-nous de vos genres littéraires préférés...">{{ old('bio', $user->bio) }}</textarea>
+                                <textarea class="form-control" name="bio" rows="3" placeholder="Partagez vos goûts littéraires et vos centres d'intérêt...">{{ old('bio', $user->bio) }}</textarea>
                             </div>
                             
                             <hr style="border:0;border-top:1px solid var(--border);margin:32px 0">
                             
-                            <h3 style="color:var(--accent);font-size:.9rem;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Préférences de lecteur (PDF/EPUB)</h3>
+                            <h3 style="color:var(--accent);font-size:.9rem;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Préférences de lecture</h3>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
                                 <div class="form-group">
                                     <label>Thème par défaut</label>
                                     <select class="form-control" name="theme">
-                                        <option value="dark" @selected(old('theme', $preferences->theme) === 'dark')>Mode Sombre (Recommandé)</option>
-                                        <option value="light" @selected(old('theme', $preferences->theme) === 'light')>Mode Clair</option>
-                                        <option value="sepia" @selected(old('theme', $preferences->theme) === 'sepia')>Mode Sépia</option>
+                                        <option value="dark" @selected(old('theme', $preferences->theme) === 'dark')>Sombre (Recommandé)</option>
+                                        <option value="light" @selected(old('theme', $preferences->theme) === 'light')>Clair</option>
+                                        <option value="sepia" @selected(old('theme', $preferences->theme) === 'sepia')>Sépia</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -208,7 +208,7 @@
                 <div class="custom-scroll" style="max-height:360px;overflow-y:auto;padding-right:8px;margin-bottom:32px" data-reveal>
                     @forelse($notifications as $notif)
                     <div class="list-item" style="{{ !$notif->read_at ? 'border-color:rgba(244,164,74,.4);background:rgba(244,164,74,.05)' : '' }}">
-                        <strong style="display:block;font-size:.9rem;color:var(--text)">{{ $notif->data['title'] ?? 'Alerte Système' }}</strong>
+                        <strong style="display:block;font-size:.9rem;color:var(--text)">{{ $notif->data['title'] ?? 'Alerte système' }}</strong>
                         <p style="font-size:.8rem;color:var(--text-2);margin-top:4px">{{ $notif->data['message'] ?? '' }}</p>
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
                             <span style="font-size:.7rem;color:var(--muted)">{{ $notif->created_at->diffForHumans() }}</span>
@@ -229,7 +229,7 @@
 
                 <div class="section-head" data-reveal>
                     <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
-                        <h2 style="font-size:1.3rem">Historique Récent</h2>
+                        <h2 style="font-size:1.3rem">Historique récent</h2>
                         <span class="badge badge-default">{{ $historyCount }} sessions</span>
                     </div>
                 </div>
@@ -248,7 +248,7 @@
                     </a>
                     @empty
                     <div class="empty-state" style="padding:30px 20px">
-                        <p style="margin:0">Votre historique apparaîtra ici après vos premières lectures.</p>
+                        <p style="margin:0">L'historique de vos lectures s'affichera ici dès que vous commencerez à lire.</p>
                     </div>
                     @endforelse
                 </div>

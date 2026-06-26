@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lectura | Upload admin</title>
+    <title>Lectura | Ajout admin</title>
     <link rel="icon" type="image/png" href="{{ asset('images/branding/lectura-logo-3d.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -367,7 +367,7 @@
                 <p>Complétez les informations ci-dessous pour importer un nouveau fichier dans la bibliothèque.</p>
             </div>
             <div style="display:flex;gap:10px;">
-                <a class="button" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                <a class="button" href="{{ route('admin.dashboard') }}">Tableau de bord</a>
                 <a class="button" href="{{ route('reader.index') }}">Bibliothèque</a>
             </div>
         </section>
@@ -421,11 +421,6 @@
                         </div>
 
                         <div class="field">
-                            <label for="page_count">Nombre de pages</label>
-                            <input id="page_count" name="page_count" type="number" min="1" value="{{ old('page_count') }}">
-                        </div>
-
-                        <div class="field">
                             <label for="published_at">Date de publication</label>
                             <input id="published_at" name="published_at" type="date" value="{{ old('published_at') }}">
                         </div>
@@ -458,7 +453,7 @@
                         </div>
 
                         <div class="field field-full" style="margin-top: 8px;">
-                            <button class="button button-accent" type="submit">Uploader le livre</button>
+                            <button class="button button-accent" type="submit">Ajouter le livre</button>
                         </div>
                     </div>
                 </form>

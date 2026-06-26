@@ -42,6 +42,17 @@ class BookUploadController extends Controller
         $extension = $this->detectFileExtension($file);
         $slug = $this->makeUniqueSlug($validated['title']);
         $storedCover = null;
+        $pageCount = $validated['page_count'] ?? null;
+
+        if (empty($pageCount) && $extension === 'pdf') {
+            try {
+                $parser = new \Smalot\PdfParser\Parser();
+                $pdf = $parser->parseFile($file->getPathname());
+                $pageCount = count($pdf->getPages());
+            } catch (\Exception $e) {
+                // Ignorer les erreurs de lecture PDF
+            }
+        }
 
         try {
             // stockage fichier sur le disque Laravel choisi pour le site.
@@ -81,7 +92,7 @@ class BookUploadController extends Controller
                 'file_format' => $extension,
                 'file_mime_type' => $storedFile['file_mime_type'],
                 'file_size' => $storedFile['file_size'],
-                'page_count' => $validated['page_count'] ?? null,
+                'page_count' => $pageCount,
                 'published_at' => $validated['published_at'] ?? null,
                 'price' => $validated['price'] ?? 0,
                 'average_rating' => 0,
@@ -132,10 +143,21 @@ class BookUploadController extends Controller
         $newStoredFile = null;
         $newExtension = null;
         $newStoredCover = null;
+        $pageCount = $validated['page_count'] ?? null;
 
         if ($request->hasFile('book_file')) {
             $file = $request->file('book_file');
             $newExtension = $this->detectFileExtension($file);
+
+            if (empty($pageCount) && $newExtension === 'pdf') {
+                try {
+                    $parser = new \Smalot\PdfParser\Parser();
+                    $pdf = $parser->parseFile($file->getPathname());
+                    $pageCount = count($pdf->getPages());
+                } catch (\Exception $e) {
+                    // Ignorer les erreurs de lecture PDF
+                }
+            }
 
             try {
                 $newStoredFile = $bookStorageService->storeUploadedBook($file, $newExtension);
@@ -174,7 +196,7 @@ class BookUploadController extends Controller
                 'language' => $validated['language'] ?? 'fr',
                 'genres' => $this->normalizeGenres($validated['genres'] ?? null),
                 'cover_image' => $newStoredCover['cover_image'] ?? $book->cover_image,
-                'page_count' => $validated['page_count'] ?? null,
+                'page_count' => array_key_exists('page_count', $validated) ? $pageCount : $book->page_count,
                 'published_at' => $validated['published_at'] ?? null,
                 'price' => $validated['price'] ?? 0,
                 'is_published' => $validated['is_published'] ?? false,

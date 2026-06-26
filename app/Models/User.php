@@ -75,9 +75,14 @@ class User extends Authenticatable
             ->first();
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'super_admin']);
     }
 
     public function getPreferenceTheme(): string
