@@ -392,7 +392,9 @@ body{
     .grid-4,.grid-3{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
     .section-head{margin:28px 0 14px}
     .section-head h2{font-size:1.3rem}
+    #menu-btn{display:flex;align-items:center;justify-content:center}
 }
+#menu-btn{display:none}
 
 /* ─── STATS STRIP ─── */
 .stats-strip{

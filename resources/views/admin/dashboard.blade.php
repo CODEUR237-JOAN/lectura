@@ -12,6 +12,7 @@
 
 {{-- SIDEBAR --}}
 <aside class="sidebar" id="sidebar">
+    <button id="close-sidebar-btn" onclick="document.getElementById('sidebar').classList.remove('open')" style="position:absolute;top:15px;right:15px;background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer">✕</button>
     <div class="brand">
         <img src="{{ asset('images/branding/lectura-logo-3d.png') }}" alt="Lectura">
         <div>
@@ -79,7 +80,7 @@
     {{-- TOPBAR --}}
     <div class="topbar" data-reveal>
         <div style="display:flex;align-items:center;gap:12px">
-            <button onclick="document.getElementById('sidebar').classList.toggle('open')" id="menu-btn" style="display:none;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:10px;padding:8px;color:var(--text)">☰</button>
+            <button onclick="document.getElementById('sidebar').classList.toggle('open')" id="menu-btn" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:10px;padding:8px;color:var(--text)">☰</button>
             <span class="topbar-title">Tableau de bord</span>
             <div style="display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(95,206,160,.1);border:1px solid rgba(95,206,160,.2);font-size:0.7rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">
                 <span class="online-dot"></span> Temps réel
