@@ -60,7 +60,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email:rfc', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'email:rfc', 'max:255', 'unique:users,email', 'ends_with:@gmail.com'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'name.required' => 'Veuillez indiquer votre nom.',
@@ -68,6 +68,7 @@ class AuthController extends Controller
             'email.required' => 'Une adresse email est requise.',
             'email.email' => 'L\'adresse email saisie n\'est pas valide.',
             'email.unique' => 'Cette adresse email est déjà associée à un compte.',
+            'email.ends_with' => 'L\'adresse email doit obligatoirement être une adresse Gmail (@gmail.com).',
             'password.required' => 'Un mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
             'password.confirmed' => 'Les mots de passe ne correspondent pas.',

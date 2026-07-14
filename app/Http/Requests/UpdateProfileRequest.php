@@ -20,7 +20,7 @@ class UpdateProfileRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'email' => ['required', 'email', 'max:255', 'ends_with:@gmail.com', Rule::unique('users', 'email')->ignore($user->id)],
             'avatar' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:1200'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
@@ -29,6 +29,13 @@ class UpdateProfileRequest extends FormRequest
             'line_spacing' => ['required', Rule::in(['compact', 'comfortable', 'wide'])],
             'page_flip_enabled' => ['nullable', 'boolean'],
             'immersive_mode_default' => ['nullable', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.ends_with' => 'L\'adresse email doit obligatoirement être une adresse Gmail (@gmail.com).',
         ];
     }
 
