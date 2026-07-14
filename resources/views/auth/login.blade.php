@@ -5,25 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lectura | Connexion</title>
     <link rel="icon" type="image/png" href="{{ asset('images/branding/lectura-logo-3d.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        accent: '#ffb45d',
-                        accent2: '#6dd3ff',
-                    },
-                    boxShadow: {
-                        glow: '0 28px 80px rgba(0, 0, 0, 0.38)',
-                    },
-                    fontFamily: {
-                        display: ['Georgia', 'serif'],
-                    },
-                },
-            },
-        };
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen overflow-x-hidden bg-slate-950 text-slate-100">
     <div class="pointer-events-none fixed inset-0">
