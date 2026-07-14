@@ -23,7 +23,7 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role' => ['required', 'string', Rule::in(['reader', 'admin', 'super_admin'])],
+            'role' => ['required', 'string', Rule::in(['reader', 'admin'])],
         ];
     }
 }
