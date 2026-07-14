@@ -298,11 +298,13 @@
                     </div>
                     <div class="item-actions">
                         @if($admin->isSuperAdmin())
+                            @if($user->id !== $admin->id && $user->role !== 'super_admin')
                             <form method="POST" action="{{ route('admin.users.role', $user) }}">
                                 @csrf @method('PUT')
                                 <input type="hidden" name="role" value="{{ $user->role==='admin' ? 'reader' : 'admin' }}">
-                                <button class="btn btn-ghost btn-sm">{{ $user->role==='admin' || $user->role==='super_admin' ? 'Retirer admin' : 'Rendre admin' }}</button>
+                                <button class="btn btn-ghost btn-sm">{{ $user->role==='admin' ? 'Retirer admin' : 'Rendre admin' }}</button>
                             </form>
+                            @endif
                             @if($user->is_connected)
                             <form method="POST" action="{{ route('admin.users.disconnect', $user) }}">
                                 @csrf
