@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "php -S 0.0.0.0:$PORT -t public public/index.php",
+    "startCommand": "php artisan serve --host :: --port $PORT",
     "releaseCommand": "php artisan migrate --force"
   }
 }
