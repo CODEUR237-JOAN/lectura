@@ -11,15 +11,6 @@ use App\Http\Controllers\ReaderController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/debug-session', function () {
-    return [
-        'driver' => config('session.driver'),
-        'table' => config('session.table'),
-        'has_table' => \Illuminate\Support\Facades\Schema::hasTable(config('session.table', 'sessions')),
-        'users_in_session' => \Illuminate\Support\Facades\DB::table('sessions')->whereNotNull('user_id')->count(),
-    ];
-});
-
 Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->isAdmin()
