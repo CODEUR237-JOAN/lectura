@@ -284,7 +284,7 @@
                         </div>
                         <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
                             <span class="badge {{ $user->role==='admin' || $user->role==='super_admin' ? 'badge-accent' : 'badge-blue' }}">{{ $user->role === 'super_admin' ? 'Admin Principal' : ($user->role === 'admin' ? 'Administrateur' : 'Lecteur') }}</span>
-                            <span class="badge {{ $user->is_connected ? 'badge-green' : 'badge-default' }}">{{ $user->is_connected ? 'en ligne' : 'hors ligne' }}</span>
+                            <span class="badge {{ $user->is_connected ? 'badge-green' : 'badge-default' }}">{{ $user->is_connected ? 'En ligne' : 'Hors ligne' }}</span>
                         </div>
                     </div>
                     <div class="item-meta">
