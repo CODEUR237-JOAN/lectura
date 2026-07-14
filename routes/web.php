@@ -40,13 +40,18 @@ Route::middleware('auth.required')->group(function () {
     Route::post('/lecteur/livres/{book}/envie', [ReadingListController::class, 'toggleWishlist'])->name('reader.wishlist.toggle');
 });
 
-Route::middleware('auth.required')->prefix('lecteur')->name('reader.')->group(function () {
+Route::prefix('lecteur')->name('reader.')->group(function () {
+    // Routes publiques
     Route::get('/', [ReaderController::class, 'index'])->name('index');
     Route::get('/livres/{book}', [ReaderController::class, 'show'])->name('show');
-    Route::get('/livres/{book}/fichier', [ReaderController::class, 'asset'])->name('asset');
-    Route::post('/livres/{book}/progression', [ReaderController::class, 'saveProgress'])->name('progress.store');
-    Route::post('/livres/{book}/termine', [ReaderController::class, 'markFinished'])->name('progress.finish');
-    Route::get('/stats', [ReaderController::class, 'stats'])->name('stats');
+
+    // Routes protégées
+    Route::middleware('auth.required')->group(function () {
+        Route::get('/livres/{book}/fichier', [ReaderController::class, 'asset'])->name('asset');
+        Route::post('/livres/{book}/progression', [ReaderController::class, 'saveProgress'])->name('progress.store');
+        Route::post('/livres/{book}/termine', [ReaderController::class, 'markFinished'])->name('progress.finish');
+        Route::get('/stats', [ReaderController::class, 'stats'])->name('stats');
+    });
 });
 
 Route::middleware(['auth.required', 'admin'])->prefix('admin')->name('admin.')->group(function () {

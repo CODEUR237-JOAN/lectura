@@ -191,12 +191,16 @@ class ReaderController extends Controller
     {
         abort_unless($book->is_published, 404);
 
-        $reader     = $this->resolveReaderUser();
-        $progress   = $book->getUserProgress($reader->id);
-        $preferences = UserPreference::query()->firstOrCreate(
+        /** @var User|null $reader */
+        $reader = auth()->user();
+
+        $progress = $reader ? $book->getUserProgress($reader->id) : null;
+        
+        $preferences = $reader ? UserPreference::query()->firstOrCreate(
             ['user_id' => $reader->id],
             $this->defaultPreferences()
-        );
+        ) : new UserPreference($this->defaultPreferences());
+
         $book->load([
             'author',
             'reviews' => fn ($query) => $query
@@ -209,26 +213,28 @@ class ReaderController extends Controller
             'wishlists',
         ]);
 
-        $userReview = auth()->check()
+        $userReview = $reader
             ? Review::query()
-                ->where('user_id', auth()->id())
+                ->where('user_id', $reader->id)
                 ->where('book_id', $book->id)
                 ->first()
             : null;
 
-        $isFavorite = $reader->favorites()
-            ->where('book_id', $book->id)
-            ->exists();
+        $isFavorite = $reader
+            ? $reader->favorites()->where('book_id', $book->id)->exists()
+            : false;
 
-        $isInWishlist = $reader->wishlists()
-            ->where('book_id', $book->id)
-            ->exists();
+        $isInWishlist = $reader
+            ? $reader->wishlists()->where('book_id', $book->id)->exists()
+            : false;
 
         abort_unless(
             $book->hasRemoteFile() || $bookStorageService->exists($book),
             404,
             'Le fichier du livre est introuvable.'
         );
+
+        $readerFileUrl = $reader ? ($book->hasRemoteFile() ? $book->fichier_path : route('reader.asset', $book, false)) : null;
 
         return response()->view('reader.show', [
             'book'          => $book,
@@ -238,9 +244,7 @@ class ReaderController extends Controller
             'userReview'    => $userReview,
             'isFavorite'    => $isFavorite,
             'isInWishlist'  => $isInWishlist,
-            'readerFileUrl' => $book->hasRemoteFile()
-                ? $book->fichier_path
-                : route('reader.asset', $book, false),
+            'readerFileUrl' => $readerFileUrl,
         ]);
     }
 
@@ -279,6 +283,11 @@ class ReaderController extends Controller
             : ($totalPages > 0
                 ? round(($currentPage / $totalPages) * 100, 2)
                 : 0.0);
+
+        // Si le livre n'a pas de nombre de pages défini, on l'ajuste avec la valeur détectée par le lecteur PDF
+        if (empty($book->page_count) && $totalPages > 0) {
+            $book->update(['page_count' => $totalPages]);
+        }
 
         $isFinished = (bool) ($validated['is_finished'] ?? ($progressPercent >= 99.5));
 

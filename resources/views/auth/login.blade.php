@@ -109,15 +109,7 @@
 
                     @include('partials.flash-messages')
 
-                    @if ($errors->any())
-                        <div class="mb-5 rounded-[1.5rem] border border-rose-300/20 bg-rose-400/10 px-4 py-4 text-sm text-rose-100">
-                            <ul class="space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+
 
                     <form method="POST" action="{{ route('login.store', [], false) }}" class="grid gap-5">
                         @csrf
@@ -131,8 +123,11 @@
                                 value="{{ old('email') }}"
                                 required
                                 autofocus
-                                class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white outline-none transition focus:border-cyan-300/40"
+                                class="rounded-2xl border bg-slate-950/60 px-4 py-3 text-white outline-none transition @error('email') border-rose-400/50 focus:border-rose-400 @else border-white/10 focus:border-cyan-300/40 @enderror"
                             >
+                            @error('email')
+                                <span class="text-xs font-medium text-rose-400">{{ $message }}</span>
+                            @enderror
                         </label>
 
                         <label class="grid gap-2 text-sm text-slate-300" for="password">
@@ -142,8 +137,11 @@
                                 name="password"
                                 type="password"
                                 required
-                                class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white outline-none transition focus:border-cyan-300/40"
+                                class="rounded-2xl border bg-slate-950/60 px-4 py-3 text-white outline-none transition @error('password') border-rose-400/50 focus:border-rose-400 @else border-white/10 focus:border-cyan-300/40 @enderror"
                             >
+                            @error('password')
+                                <span class="text-xs font-medium text-rose-400">{{ $message }}</span>
+                            @enderror
                         </label>
 
                         <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-4 text-sm text-slate-200" for="remember">
@@ -157,6 +155,13 @@
                         >
                             Se connecter
                         </button>
+
+                        <a
+                            href="{{ route('reader.index', [], false) }}"
+                            class="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-slate-950/40 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:-translate-y-0.5 hover:bg-slate-950/60"
+                        >
+                            Continuer en visiteur
+                        </a>
                     </form>
 
                     <div class="mt-6 flex flex-col gap-3 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">

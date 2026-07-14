@@ -288,6 +288,7 @@
             </aside>
 
             <main class="main" style="display:flex; flex-direction:column; gap:16px;">
+                @auth
                 <section class="toolbar" style="flex-shrink:0;">
                     <div class="toolbar-left">
                         <button class="btn" id="prev-page" type="button">Page précédente</button>
@@ -321,6 +322,19 @@
                         <div class="epub" id="epub-stage" hidden style="flex:1;"></div>
                     </section>
                 </section>
+                @else
+                <section class="frame-shell" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; text-align:center; min-height:60vh;">
+                    <div style="max-width:400px; background:var(--panel); padding:34px 30px; border-radius:24px; border:1px solid var(--line); box-shadow:0 20px 50px rgba(0,0,0,0.2);">
+                        <span style="font-size:3.5rem; display:block; margin-bottom:18px; filter: grayscale(100%) opacity(0.8);">🔒</span>
+                        <h2 style="margin:0 0 12px; font-family:Georgia,serif; font-size:1.65rem;">Lecture réservée aux membres</h2>
+                        <p style="color:var(--muted); line-height:1.6; margin-bottom:28px;">Connectez-vous pour lire ce livre dans son intégralité, sauvegarder votre progression et ajouter des favoris.</p>
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            <a class="btn btn-accent" href="{{ route('register', [], false) }}" style="width:100%">Créer un compte gratuit</a>
+                            <a class="btn" href="{{ route('login', [], false) }}" style="width:100%">Se connecter</a>
+                        </div>
+                    </div>
+                </section>
+                @endauth
 
                 @include('partials.app-footer', ['class' => 'reader-footer'])
             </main>
@@ -389,7 +403,17 @@
             pdfLoadTimer: null,
         };
 
-        initReader();
+        if (readerConfig.fileUrl) {
+            initReader();
+        } else {
+            applyTheme(readerConfig.preferredTheme || localStorage.getItem('lectura-theme') || 'dark');
+            themeToggle.addEventListener('click', toggleTheme);
+            immersiveToggle.addEventListener('click', toggleImmersive);
+            if (readerConfig.immersiveModeDefault) {
+                layout.classList.add('immersive');
+            }
+            syncImmersiveLabel();
+        }
 
         async function initReader() {
             applyTheme(readerConfig.preferredTheme || localStorage.getItem('lectura-theme') || 'dark');

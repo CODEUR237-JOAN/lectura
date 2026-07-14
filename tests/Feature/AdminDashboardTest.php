@@ -22,7 +22,7 @@ class AdminDashboardTest extends TestCase
         $response = $this->actingAs($admin)->get(route('admin.dashboard'));
 
         $response->assertOk();
-        $response->assertSee('Suivi des connexions indisponible', false);
-        $response->assertSee('Environnement actuel', false);
+        $response->assertSee('suivi indisponible', false);
+        $response->assertSee('Le suivi en temps réel est désactivé.', false);
     }
 }
