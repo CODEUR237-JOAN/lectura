@@ -187,8 +187,8 @@ class AdminDashboardController extends Controller
 
         $validated = $request->validated();
 
-        if ((int) $request->user()->id === (int) $user->id && $validated['role'] !== 'admin') {
-            return back()->with('warning', 'Vous ne pouvez pas retirer vos propres droits administrateur.');
+        if ((int) $request->user()->id === (int) $user->id && $validated['role'] !== $user->role) {
+            return back()->with('warning', 'Vous ne pouvez pas modifier votre propre rôle depuis cette interface.');
         }
 
         $user->update([
