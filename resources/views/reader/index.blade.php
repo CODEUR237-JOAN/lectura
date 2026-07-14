@@ -234,7 +234,7 @@
             Lectura · Système de lecture immersive
         </div>
         <h1 class="hero-title">
-            @auth Bonjour, {{ explode(' ', $readerName)[0] }}. @else Bienvenue sur Lectura. @endauth
+            @auth Bienvenue, {{ explode(' ', $readerName)[0] }}. @else Bienvenue sur Lectura. @endauth
         </h1>
         <p class="hero-sub">
             @if($continueReading->isNotEmpty())
